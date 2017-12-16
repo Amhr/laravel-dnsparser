@@ -1,0 +1,10 @@
+{
+    "name": "root/dnsparser",
+    "authors": [
+        {
+            "name": "Mohammad",
+            "email": "pp2007ws@yahoo.com"
+        }
+    ],
+    "require": {}
+}
