@@ -1,8 +1,12 @@
 <?php
 
 namespace Mhr\DNSParser;
-
+/**
+ * Class DNS
+ * @package Mhr\DNSParser
+ */
 class DNS {
+
 
     private $name;
     private $ttl=false;
