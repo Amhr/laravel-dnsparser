@@ -8,7 +8,7 @@ class DNSParser {
     static public $PACAKGE_ROOT = __DIR__;
     private $dnsList =[];
     private $accepted_types = [
-        "SOA","NS","MX","TXT","SRV","CNAME","A"
+        "NS","MX","TXT","SRV","CNAME","A"
     ];
 
     /**
@@ -106,27 +106,19 @@ class DNSParser {
 //                echo "SKIPPING LINE : $line_n \n";
                 continue;
             }
-            $line = str_replace("\t"," ",$line_raw);
-
-            if(strpos($line,"TXT") !== false){ // safe exploding for TXT types
-
-                $value_raw = explode('"',$line,2);
-                $value = '"'.$value_raw[1];
-
-                $line =  $line = explode(" ",$value_raw[0]);
-                $line = array_filter($line,function($d){
-                    return trim($d) != "";
-                });
-                $line []= $value;
-
-            }else{
-                $line = explode(" ",$line);
-                $line = array_filter($line,function($d){
-                    return trim($d) != "";
-                });
+            $text=  str_replace("  ","\t",$line_raw);
+            $line = preg_split("/[\r,\t,\n,\f]+/",$text);
+            $res = [];
+            foreach ($line as $item){
+                preg_match('#\((.*?)\)#', $item, $match);
+                if($match && isset($match[1]))
+                    $res[]= $match[1];
+                else $res[]=$item;
             }
 
-            $dns =  DNS::parseLine($line,$this->accepted_types);
+
+
+            $dns =  DNS::parseLine($res,$this->accepted_types);
             if($dns)
                 $this->dnsList [] = $dns;
 
@@ -182,6 +174,18 @@ class DNSParser {
         return array_values($filter);
     }
 
+    /**
+     * @return DNS[]
+     */
+    public function fetchByValue($name){
+        $filter = [];
+        foreach ($this->fetchAll() as $dns){
+//            echo $dns->getName()."\n";
+            if($dns->getValue() == $name)
+                $filter []= $dns;
+        }
+        return array_values($filter);
+    }
 
 
 
