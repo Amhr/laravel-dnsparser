@@ -1,6 +1,6 @@
 <?php
 
-namespace Mhr\dnsparser;
+namespace Mhr\DNSParser;
 
 class DNSParser {
 
