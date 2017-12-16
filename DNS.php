@@ -198,7 +198,7 @@ class DNS {
 
 
         if(!$parsed){
-            dd($line);
+//            dd($line);
         }
 
         if(in_array($instance->getType(),$accepted_type))
